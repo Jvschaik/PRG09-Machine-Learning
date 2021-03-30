@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from machinelearningdata import Machine_Learning_Data
 from sklearn.metrics import accuracy_score
 from sklearn import tree
+from sklearn.linear_model import LogisticRegression
 
 def extract_from_json_as_np_array(key, json_data):
     data_as_array = []
@@ -54,16 +55,14 @@ plt.scatter(c1x, c1y, s = 10, c='red')
 plt.scatter(c2x, c2y, s = 10, c='blue')
 # plt.scatter(x, y, s = 10)
 plt.show()
+
+############################################### DECISION TREE #####################################################
 decisionTree = tree.DecisionTreeClassifier().fit(X, Y)
 
 # Done: voorspel na het trainen de Y-waarden (je gebruikt hiervoor dus niet meer de
 #       echte Y-waarden, maar enkel de X en je getrainde classifier) en noem deze
 #       bijvoordeeld Y_predict
 Y_predict = decisionTree.predict(X)
-
-m, b = np.polyfit(x, Y_predict, 1)
-X_plot = np.linspace([min(x), max(x)], 1)
-plt.plot(X_plot, m*X_plot + b, '-')
 
 # Done: vergelijk Y_predict met de echte Y om te zien hoe goed je getraind hebt
 treeAccuracyScore = accuracy_score(Y, Y_predict)
@@ -87,15 +86,46 @@ y_test = X_test[...,1]
 # Z = np.zeros(100) # dit is een gok dat alles 0 is... kan je zelf voorspellen hoeveel procent er goed is?
 Z = decisionTree.predict(X_test)
 g = plt.figure(2)
-
-m, b = np.polyfit(x_test, Z, 1)
-X_plot = np.linspace([min(x)], 1)
-plt.plot(X_plot, m*X_plot + b, '-')
-
 plt.scatter(x_test, y_test, c = Z, s = 10)
 g.show()
 
 # stuur je voorspelling naar de server om te kijken hoe goed je het gedaan hebt
 classification_test = data.classification_test(Z.tolist()) # tolist zorgt ervoor dat het numpy object uit de predict omgezet wordt naar een 'normale' lijst van 1'en en 0'en
 print("Classificatie accuratie test(Tree): " + str(classification_test))
+
+############################################### REGRESSION #####################################################
+regression = LogisticRegression().fit(X, Y)
+
+# Done: voorspel na het trainen de Y-waarden (je gebruikt hiervoor dus niet meer de
+#       echte Y-waarden, maar enkel de X en je getrainde classifier) en noem deze
+#       bijvoordeeld Y_predict
+Y_predict = regression.predict(X)
+
+# Done: vergelijk Y_predict met de echte Y om te zien hoe goed je getraind hebt
+regAccuracyScore = accuracy_score(Y, Y_predict)
+print("Classificatie accuratie training(Reg): " + str(regAccuracyScore))
+q = plt.figure(3)
+plt.scatter(x, y, c = Y_predict, s = 10)
+q.show()
+
+# haal data op om te testen
+classification_test = data.classification_test()
+# testen doen we 'geblinddoekt' je krijgt nu de Y's niet
+X_test = extract_from_json_as_np_array("x", classification_test)
+
+# Done: voorspel na nog een keer de Y-waarden, en plaats die in de variabele Z
+#       je kunt nu zelf niet testen hoe goed je het gedaan hebt omdat je nu
+#       geen echte Y-waarden gekregen hebt.
+#       onderstaande code stuurt je voorspelling naar de server, die je dan
+#       vertelt hoeveel er goed waren.
+x_test = X_test[...,0]
+y_test = X_test[...,1]
+# Z = np.zeros(100) # dit is een gok dat alles 0 is... kan je zelf voorspellen hoeveel procent er goed is?
+Z = regression.predict(X_test)
+p = plt.figure(4)
+plt.scatter(x_test, y_test, c = Z, s = 10)
+p.show()
+# stuur je voorspelling naar de server om te kijken hoe goed je het gedaan hebt
+classification_test = data.classification_test(Z.tolist()) # tolist zorgt ervoor dat het numpy object uit de predict omgezet wordt naar een 'normale' lijst van 1'en en 0'en
+print("Classificatie accuratie test(Reg): " + str(classification_test))
 input("Press Enter to continue...")
