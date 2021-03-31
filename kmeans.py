@@ -35,6 +35,7 @@ kmeans_training = data.clustering_training()
 
 # extract de x waarden
 X = extract_from_json_as_np_array("x", kmeans_training)
+# print(X)
 
 # slice kolommen voor plotten (let op, dit is de y voor de y-as, niet te verwarren met een y van de data)
 x = X[..., 0]
@@ -52,7 +53,8 @@ plt.scatter(x, y)
 plt.scatter(Cx, Cy, c='black', s=10000, alpha=0.3)
 
 plt.axis([min(x), max(x), min(y), max(y)])
-plt.show()
+plt.show() # figure 1
+
 # Done: ontdek de clusters mbv kmeans en teken een plot met kleurtjes
 groups = kmeans.predict(X)
 plt.scatter(x, y, c=groups)

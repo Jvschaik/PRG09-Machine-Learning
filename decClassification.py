@@ -20,11 +20,12 @@ data = Machine_Learning_Data(STUDENTNUMMER)
 
 # haal data op voor classificatie
 classification_training = data.classification_training()
+#print(classification_training)
 
 # extract de data x = array met waarden, y = classificatie 0 of 1
-X = extract_from_json_as_np_array("x", classification_training)
-
-# dit zijn de werkelijke waarden, daarom kan je die gebruiken om te trainen
+X = extract_from_json_as_np_array("x", classification_training) 
+# X heeft alle coordinaten
+#Y heeft alle labels
 Y = extract_from_json_as_np_array("y", classification_training)
 
 # Done: leer de classificaties
@@ -74,7 +75,7 @@ f.show()
 
 # haal data op om te testen
 classification_test = data.classification_test()
-# testen doen we 'geblinddoekt' je krijgt nu de Y's niet
+# Test stoppen we in variabel X_test
 X_test = extract_from_json_as_np_array("x", classification_test)
 
 # Done: voorspel na nog een keer de Y-waarden, en plaats die in de variabele Z
@@ -82,12 +83,15 @@ X_test = extract_from_json_as_np_array("x", classification_test)
 #       geen echte Y-waarden gekregen hebt.
 #       onderstaande code stuurt je voorspelling naar de server, die je dan
 #       vertelt hoeveel er goed waren.
+
+#maken labels en coordinaten
 x_test = X_test[...,0]
 y_test = X_test[...,1]
-# Z = np.zeros(100) # dit is een gok dat alles 0 is... kan je zelf voorspellen hoeveel procent er goed is?
+# controleren of de coordinaten goed zijn met predict
 Z = decisionTree.predict(X_test)
 g = plt.figure(2)
 
+#blauwe lijn, om relatief goed het gemiddelde te pakken
 m, b = np.polyfit(x_test, Z, 1)
 X_plot = np.linspace([min(x)], 1)
 plt.plot(X_plot, m*X_plot + b, '-')
