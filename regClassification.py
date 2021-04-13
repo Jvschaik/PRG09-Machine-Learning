@@ -71,7 +71,7 @@ X_plot = np.linspace([min(x_test)], 1)
 plt.plot(X_plot, m*X_plot + b, '-')
 
 plt.scatter(x_test, y_test, c = Z, s = 10)
-plt.show()
+plt.show() 
 # stuur je voorspelling naar de server om te kijken hoe goed je het gedaan hebt
 
 # tolist zorgt ervoor dat het numpy object uit de predict omgezet wordt naar een 'normale' lijst van 1'en en 0'en

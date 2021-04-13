@@ -29,7 +29,7 @@ data = Machine_Learning_Data(STUDENTNUMMER)
 
 # UNSUPERVISED LEARNING
 
-# haal clustering data op
+# datapunten die een x en een y hebben
 kmeans_training = data.clustering_training()
 # print(kmeans_training) 
 
